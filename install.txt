@@ -29,3 +29,6 @@ do
     printf "%-20s " "$x"
     gst-inspect-1.0 "$x" >/dev/null 2>&1 && echo "AVAILABLE" || echo "MISSING"
 done
+
+
+sudo apt install -y python3-gi python3-gst-1.0
