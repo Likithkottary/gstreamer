@@ -24,6 +24,8 @@ def run_cpu(display=True):
             rtph265depay !
             h265parse !
             avdec_h265 !
+            videoscale !
+            video/x-raw,width=640,height=480 !
             {sink}
             '''
         )
