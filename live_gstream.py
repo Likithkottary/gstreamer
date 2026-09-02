@@ -1,17 +1,40 @@
 import gi
 gi.require_version("Gst", "1.0")
 from gi.repository import Gst, GLib
+
 from cameras import cameras
 
 Gst.init(None)
+
 
 def run_cpu(display=True):
 
     pipelines = []
 
-    for name, url in cameras.items():
+    for name, config in cameras.items():
 
-        print(f"Starting CPU: {name}")
+        url = config["url"]
+        codec = config["codec"]
+
+        print(f"Starting CPU: {name} ({codec})")
+
+        if codec == "h264":
+            decoder = """
+                rtph264depay !
+                h264parse !
+                avdec_h264 !
+            """
+
+        elif codec == "h265":
+            decoder = """
+                rtph265depay !
+                h265parse !
+                avdec_h265 !
+            """
+
+        else:
+            print(f"Unknown codec for {name}: {codec}")
+            continue
 
         if display:
             sink = "videoconvert ! autovideosink sync=false"
@@ -21,9 +44,7 @@ def run_cpu(display=True):
         pipeline = Gst.parse_launch(
             f'''
             rtspsrc location="{url}" latency=100 !
-            rtph265depay !
-            h265parse !
-            avdec_h265 !
+            {decoder}
             videoscale !
             video/x-raw,width=640,height=480 !
             {sink}
