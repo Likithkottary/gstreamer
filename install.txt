@@ -1,0 +1,31 @@
+sudo apt update
+
+sudo apt install -y \
+  gstreamer1.0-tools \
+  gstreamer1.0-plugins-base \
+  gstreamer1.0-plugins-good \
+  gstreamer1.0-plugins-bad \
+  gstreamer1.0-plugins-ugly \
+  gstreamer1.0-libav
+
+
+gst-launch-1.0 --version
+
+
+for x in \
+rtspsrc \
+rtph264depay \
+rtph265depay \
+h264parse \
+h265parse \
+avdec_h264 \
+avdec_h265 \
+appsink \
+videoconvert \
+videoscale \
+queue \
+tee
+do
+    printf "%-20s " "$x"
+    gst-inspect-1.0 "$x" >/dev/null 2>&1 && echo "AVAILABLE" || echo "MISSING"
+done
