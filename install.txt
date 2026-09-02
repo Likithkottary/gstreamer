@@ -32,3 +32,4 @@ done
 
 
 sudo apt install -y python3-gi python3-gst-1.0
+python3 -c "import gi; gi.require_version('Gst', '1.0'); from gi.repository import Gst; Gst.init(None); print('GStreamer GI OK')"
